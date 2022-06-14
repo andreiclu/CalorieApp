@@ -11,6 +11,8 @@
     <router-link to="/search">Search</router-link>
     |
     <router-link to="/meals">Meals</router-link>
+    |
+    <router-link to="/bmicalculator">BMI Calculator</router-link>
 
   </nav>
   <router-view/>

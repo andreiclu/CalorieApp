@@ -5,6 +5,7 @@ import Login from "@/views/Login";
 import Search from "@/views/Search";
 import Meals from "@/views/Meals";
 import BMICalculator from "@/views/BMICalculator";
+import IdealBodyWeight from "@/views/IdealBodyWeight";
 
 const routes = [
     {
@@ -41,7 +42,12 @@ const routes = [
         path: '/bmicalculator',
         name: 'bmicalculator',
         component: BMICalculator
-    }
+    },
+    {
+        path: '/idealbodyweight',
+        name: 'idealbodyweight',
+        component: IdealBodyWeight
+    },
 ]
 
 const router = createRouter({

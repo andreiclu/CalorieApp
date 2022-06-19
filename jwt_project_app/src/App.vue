@@ -13,13 +13,16 @@
     <router-link to="/meals">Meals</router-link>
     |
     <router-link to="/bmicalculator">BMI Calculator</router-link>
-
+    |
+    <router-link to="/idealbodyweight">Ideal Body Weight</router-link>
   </nav>
   <router-view/>
 </template>
 
 <script>
 import axios from "axios";
+
+
 
 export default {
   name: 'App',

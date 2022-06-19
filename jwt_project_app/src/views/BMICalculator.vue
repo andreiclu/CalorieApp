@@ -86,3 +86,4 @@ export default {
   },
 };
 </script>
+npm i vue-chartjs chart.js

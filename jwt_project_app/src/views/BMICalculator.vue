@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="calculate">
     <div>
-      <label>height in meters</label>
+      <label>height in centimeters</label>
       <input v-model.number="height"/>
     </div>
 
@@ -81,7 +81,7 @@ export default {
         return;
       }
       const {height, mass} = this;
-      this.bmi = mass / height ** 2;
+      this.bmi = mass / (height/100) ** 2;
     },
   },
 };

@@ -1,6 +1,5 @@
 import django_filters
 from rest_framework import viewsets
-from rest_framework.permissions import AllowAny
 
 from home.models import FoodPerMeal
 from home.serializers.food_per_meal import FoodPerMealSerializer, CreateFoodPerMealSerializer
@@ -19,6 +18,12 @@ class FoodPerMealViewSet(viewsets.ModelViewSet):
         return FoodPerMealSerializer
 
     def perform_create(self, serializer):
+        existing = FoodPerMeal.objects.filter(meal=serializer.validated_data['meal'],
+                                              food=serializer.validated_data['food']).first()
+        if existing:
+            existing.number += serializer.validated_data['number']
+            existing.save()
+            return
         serializer.save()
 
     def get_queryset(self):

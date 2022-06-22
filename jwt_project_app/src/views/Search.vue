@@ -8,7 +8,7 @@
             <label>Food</label>
 
             <div class="control">
-              <input type="text" v-on:input="filteredList" v-model="input" placeholder="Search foods..."/>
+              <input type="text" v-on:input="filteredList" v-model="input" placeholder="Search"/>
               <div class="item fruit" v-for="food in foods" v-bind:key="food.id">
                 <p>{{ food.name }}</p>
               </div>

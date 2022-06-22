@@ -38,15 +38,14 @@ export default {
   data: () => ({
     config,
     icons: [
-      {icon: 'mdi-facebook', link: 'https://twitter.com/flatlogic/'},
-      {icon: 'mdi-twitter', link: 'https://www.facebook.com/flatlogic'},
-      {icon: 'mdi-github', link: 'https://github.com/flatlogic/'},
+      {icon: 'mdi-facebook', link: 'https://www.facebook.com/andrei.clu/'},
+      {icon: 'mdi-linkedin', link: 'https://www.linkedin.com/in/andrei-clucerescu-449560214'},
+      {icon: 'mdi-github', link: 'https://github.com/andreiclu/'},
 
     ],
     links: [
-      {text: 'Flatlogic', link: 'https://flatlogic.com/'},
-      {text: 'About Us', link: 'https://flatlogic.com/about'},
-      {text: 'Blog', link: 'https://flatlogic.com/blog'},
+      {text: 'Other Calculators', link: 'https://www.calculator.net/fitness-and-health-calculator.html'},
+      {text: 'Blog', link: 'https://www.obio.ro/blog/alimentatie-sanatoasa/'},
     ]
   }),
 }

@@ -2,7 +2,7 @@
   <v-container fluid>
     <div class="dashboard-page">
       <v-row no-gutters class="d-flex justify-space-between mt-10 mb-6">
-        <h1 class="page-title">Dashboard</h1>
+        <h1 class="page-title">Your Plan</h1>
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -607,6 +607,7 @@
 import mock from "./mock";
 import Trend from "vuetrend";
 import ApexChart from "vue-apexcharts";
+
 
 export default {
   name: "Dashboard",

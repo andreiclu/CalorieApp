@@ -5,7 +5,7 @@
         <v-col cols="7" class="main-part d-none d-md-none d-lg-flex">
           <div class="d-flex">
             <v-img src="@/assets/logo.svg" contain></v-img>
-            <p>Calorie Calculator</p>
+            <p>Calorie Calculator </p>
           </div>
         </v-col>
         <v-col cols="12" lg="5" class="login-part d-flex align-center justify-center">
@@ -26,8 +26,7 @@
                       <v-container>
                         <v-row class="flex-column">
                           <v-col>
-                            <p class="login-slogan display-2 text-center font-weight-medium my-10">Good Morning,
-                              User</p>
+                            <p class="login-slogan display-2 text-center font-weight-medium my-10">Good Morning!</p>
 
                           </v-col>
                           <v-col cols="12" class="d-flex align-center my-8">
@@ -170,7 +169,7 @@ export default {
           .post('http://127.0.0.1:8000/auth/users/', formData)
           .then(response => {
             console.log(response)
-            this.username = this.createEmail
+            this.email = this.createEmail
             this.password = this.createPassword
             this.login()
           })
@@ -184,7 +183,7 @@ export default {
       localStorage.removeItem('access')
 
       const formData = {
-        username: this.username,
+        username: this.email  ,
         password: this.password
       }
       axios
@@ -204,7 +203,7 @@ export default {
             localStorage.setItem('refresh', refresh)
             window.localStorage.setItem('authenticated', true);
             this.$router.push('/dashboard');
-            this.$router.push('/')
+
 
           })
           .catch(error => {
@@ -217,6 +216,7 @@ export default {
       this.$router.push('/dashboard');
     }
   },
+
 
 
 

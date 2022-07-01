@@ -39,7 +39,7 @@ class ProfileInfoPerDay(models.Model):
     weight = models.FloatField(default=0)
     height = models.FloatField(default=0)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField()
 
     class Meta:
         unique_together = ('profile', 'date')

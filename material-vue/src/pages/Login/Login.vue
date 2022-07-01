@@ -4,8 +4,9 @@
       <v-row no-gutters>
         <v-col cols="7" class="main-part d-none d-md-none d-lg-flex">
           <div class="d-flex">
-            <v-img src="@/assets/logo.svg" contain></v-img>
-            <p>Calorie Calculator </p>
+            <v-img src="@/assets/logo.svg" contain>
+            </v-img>
+            <h1>Calorie Calculator</h1>
           </div>
         </v-col>
         <v-col cols="12" lg="5" class="login-part d-flex align-center justify-center">
@@ -61,7 +62,7 @@
                               >
                                 Login
                               </v-btn>
-                              <v-btn large text class="text-capitalize primary--text">Forget Password</v-btn>
+                              <router-link to="forget" large text class="text-capitalize primary--text">Forget Password</router-link>
                             </v-col>
                           </v-form>
                         </v-row>
@@ -119,7 +120,8 @@
             </v-col>
             <v-col cols="12" class="d-flex justify-center">
               <v-footer>
-                <div class="primary--text">©2022 <a href="https://www.linkedin.com/in/andrei-clucerescu-449560214" class="text-decoration-none">Clucerescu Andrei</a>,
+                <div class="primary--text">©2022 <a href="https://www.linkedin.com/in/andrei-clucerescu-449560214"
+                                                    class="text-decoration-none">Clucerescu Andrei</a>,
                   All rights reserved.
                 </div>
               </v-footer>
@@ -183,7 +185,7 @@ export default {
       localStorage.removeItem('access')
 
       const formData = {
-        username: this.email  ,
+        username: this.email,
         password: this.password
       }
       axios
@@ -202,6 +204,14 @@ export default {
             localStorage.setItem('access', access)
             localStorage.setItem('refresh', refresh)
             window.localStorage.setItem('authenticated', true);
+            axios
+                .get('http://127.0.0.1:8000/auth/users/me/')
+                .then(response => {
+                  localStorage.setItem('username', response.data.username)
+                })
+                .catch(error => {
+                  console.log(error)
+                })
             this.$router.push('/dashboard');
 
 
@@ -216,8 +226,6 @@ export default {
       this.$router.push('/dashboard');
     }
   },
-
-
 
 
 }

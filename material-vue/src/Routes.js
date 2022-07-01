@@ -13,6 +13,11 @@ import Charts from '@/pages/Charts/Charts'
 import Maps from '@/pages/Maps/Google'
 import Error from "@/pages/Error/Error";
 import Login from "@/pages/Login/Login";
+import DailyCalorieIntake from "@/pages/DailyCalorieIntake/DailyCalorieIntake";
+import BMI from "@/pages/BMI/BMI";
+import IBW from "@/pages/IBW/IBW";
+import CBC from "@/pages/CBC/CBC";
+import Forget from "@/pages/Forget/Forget";
 
 Vue.use(Router);
 
@@ -22,6 +27,11 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/forget',
+      name: 'Forget',
+      component: Forget
     },
     {
     path: '/',
@@ -64,6 +74,26 @@ export default new Router({
         name: 'Maps',
         component: Maps
       },
+      {
+        path: 'dailycalorieintake',
+        name: 'DailyCalorieIntake',
+        component: DailyCalorieIntake
+      },
+      {
+        path: 'bmi',
+        name: 'BMI',
+        component: BMI
+      },
+      {
+        path: 'ibw',
+        name: 'IBW',
+        component: IBW
+      },
+      {
+        path: 'cbc',
+        name: 'CBC',
+        component: CBC
+      }
     ],
   },
     {

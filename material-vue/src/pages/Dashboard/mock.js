@@ -109,19 +109,19 @@ export default {
     {title: 'Sand by mail', icon: 'mdi-email'},
     {title: 'Share', icon: 'mdi-share-variant'}
   ],
-  select: ['Daily', 'Weekly', 'Monthly'],
+  select: ['Weekly', 'Monthly'],
   apexPie: {
     options: {
       dataLabels: {
         enabled: false
       },
-      colors: [config.light.primary, config.light.secondary, config.light.success, config.light.warning],
-      labels: ["Group A", "Group B", "Group C", "Group D"],
+      colors: [config.light.primary, config.light.success, config.light.warning],
+      labels: ["Proteins", "Total Fats", "Carbohydrates"],
       legend: {
 
       }
     },
-    series: [400, 300, 300, 200],
+    series: [400, 300, 300],
   },
   apexArea1: {
     options: {
@@ -221,7 +221,7 @@ export default {
       },
       stroke: {
         width: [3, 3, 0],
-        curve: ['straight', 'smooth', "smooth"]
+        curve: ['smooth']
       },
       fill: {
         type: 'linear',
@@ -256,20 +256,21 @@ export default {
     },
     series: [
       {
-        name: 'Tablet',
+        name: 'Weight',
         type: 'line',
-        data: [3100, 4000, 2800, 5100, 4200, 6090, 5100, 3100, 4000, 2800, 5100, 4200, 6090, 5100]
+        data: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75,80,85,90,95,100,105,110,115,120,125,130,135,140
+          ,145,150,155,160,165,170,175,180,190,195,200]
       },
-      {
-        name: 'Mobile',
-        type: 'line',
-        data: [1100, 3200, 4500, 3020, 3400, 5200, 4100, 1100, 3200, 4500, 3020, 3400, 5200, 4100]
-      },
-      {
-        name: 'Desktop',
-        type: 'area',
-        data: [2100, 2000, 1800, 4100, 1200, 3600, 6100, 2100, 2000, 1800, 4100, 1200, 3600, 6100]
-      }
+      // {
+      //   name: 'Mobile',
+      //   type: 'line',
+      //   data: [1100, 3200, 4500, 3020, 3400, 5200, 4100, 1100, 3200, 4500, 3020, 3400, 5200, 4100]
+      // },
+      // {
+      //   name: 'Desktop',
+      //   type: 'area',
+      //   data: [2100, 2000, 1800, 4100, 1200, 3600, 6100, 2100, 2000, 1800, 4100, 1200, 3600, 6100]
+      // }
     ],
     series2: [
       {
@@ -277,16 +278,16 @@ export default {
         type: 'line',
         data: [2100, 3000, 2800, 6100, 5200, 5090, 4100, 2100, 2000, 3800, 6100, 5200, 7090, 6100]
       },
-      {
-        name: 'Mobile',
-        type: 'line',
-        data: [1100, 3200, 4500, 3020, 3400, 5200, 4100, 1100, 3200, 4500, 3020, 3400, 5200, 4100]
-      },
-      {
-        name: 'Desktop',
-        type: 'area',
-        data: [2100, 2000, 1800, 4100, 1200, 3600, 6100, 2100, 2000, 1800, 4100, 1200, 3600, 6100]
-      }
+      // {
+      //   name: 'Mobile',
+      //   type: 'line',
+      //   data: [1100, 3200, 4500, 3020, 3400, 5200, 4100, 1100, 3200, 4500, 3020, 3400, 5200, 4100]
+      // },
+      // {
+      //   name: 'Desktop',
+      //   type: 'area',
+      //   data: [2100, 2000, 1800, 4100, 1200, 3600, 6100, 2100, 2000, 1800, 4100, 1200, 3600, 6100]
+      // }
     ],
     series3: [
       {

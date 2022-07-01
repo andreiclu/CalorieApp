@@ -10,9 +10,6 @@
     :mini-variant-width="sidebarMinWidth"
     :class="{'drawer-mini': !DRAWER_STATE}">
 
-    <div class="v-list">
-      <a class="v-list-item v-list-item--link grey--text text-sm-h6" target="_blank" href="https://flatlogic.com/generator">Generate App</a>
-    </div>
 
     <v-list>
       <template v-for="(item, i) in items">
@@ -108,8 +105,7 @@ import {mapActions, mapState} from 'vuex'
       return {
         items: [
           { title: 'Dashboard', icon: 'mdi-home', link: '/dashboard' },
-          { title: 'Typography', icon: 'mdi-format-size', link: '/typography' },
-          { title: 'Tables', icon: 'mdi-grid-large', link: '/tables' },
+          { title: 'Foods/Meals', icon: 'mdi-food', link: '/tables' },
           { title: 'Notifications', icon: 'mdi-bell-outline', link: '/notifications' },
           {
             title: 'UI Elements',
@@ -124,14 +120,15 @@ import {mapActions, mapState} from 'vuex'
           },
           { divider: true },
           { heading: 'CALCULATORS' },
-          { title: 'Daily Calorie Intake', icon: 'mdi-book-variant-multiple', href: 'https://flatlogic.com/templates'},
-          { title: 'Support', icon: 'mdi-forum', href: 'https://flatlogic.com/forum/'},
-          { title: 'FAQ', icon: 'mdi-help-circle-outline', href:'https://flatlogic.com/templates/vue-material-template'},
+          { title: 'Daily Calorie', icon: 'mdi-basket', link: '/dailycalorieintake'},
+          { title: 'BMI', icon: 'mdi-bike', link: '/bmi'},
+          { title: 'Ideal Body Weight', icon: 'mdi-scale-balance', link:'/IBW'},
+          { title: 'Calories Burned', icon: 'mdi-fire', link:'/CBC'},
           { divider: true },
-          { heading: 'PROJECTS' },
-          { title: 'My recent', icon: 'mdi-circle-medium', color: 'warning'},
-          { title: 'Starred', icon: 'mdi-circle-medium', color: 'primary'},
-          { title: 'Background', icon: 'mdi-circle-medium', color: 'error'}
+          { heading: 'MEALS' },
+          { title: 'MealName1', icon: 'mdi-check', color: 'warning'},
+          { title: 'MealName2', icon: 'mdi-check', color: 'primary'},
+          { title: 'MealName3', icon: 'mdi-check', color: 'error'}
 
         ],
         sidebarWidth: 240,

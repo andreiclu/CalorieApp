@@ -14,3 +14,4 @@ class FoodViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     filter_backends = [SearchFilter]
     search_fields = ['^name']
+

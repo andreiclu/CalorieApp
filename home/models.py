@@ -31,6 +31,20 @@ class Profile(models.Model):
     lifestyle = models.CharField(max_length=100, choices=_LIFESTYLE_CHOICES, null=True, blank=True)
 
 
+class ProfileInfoPerDay(models.Model):
+    calories = models.FloatField(default=0)
+    carbs = models.FloatField(default=0)
+    proteins = models.FloatField(default=0)
+    fats = models.FloatField(default=0)
+    weight = models.FloatField(default=0)
+    height = models.FloatField(default=0)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    date = models.DateField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('profile', 'date')
+
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

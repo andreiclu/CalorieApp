@@ -3,11 +3,39 @@
     <div class="dashboard-page">
       <v-row no-gutters class="d-flex justify-space-between mt-10 mb-6">
         <h1 class="page-title">Your Plan</h1>
+
         <v-menu offset-y>
         </v-menu>
       </v-row>
       <v-row>
-
+        <v-col
+            cols="12"
+            sm="6"
+            md="4"
+        >
+          <v-menu
+              :close-on-content-click="false"
+              :nudge-right="40"
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                  v-model="date"
+                  label="Select a date for other stats: "
+                  prepend-icon="mdi-calendar"
+                  readonly
+                  v-bind="attrs"
+                  v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+                v-model="date"
+                @input="getData"
+            ></v-date-picker>
+          </v-menu>
+        </v-col>
         <v-col lg="12" sm="6" md="7" cols="12">
           <v-card class="mx-1 mb-1">
             <v-card-title class="pa-6 pb-3">
@@ -38,32 +66,22 @@
                   </v-icon>
                   <span class="card-light-grey">Today Calories</span>
                 </div>
-                <div>
-                  <v-icon color="warning"> mdi-circle-medium</v-icon>
-                  <span class="card-light-grey">Your Goal</span>
-                </div>
+
               </v-row>
               <v-row no-gutters class="pb-3">
                 <v-col>
                   <div class="text-h6 card-light-grey font-weight-regular">
-                    Today Calories
+                    Today Calories {{ calories }}/{{ goal }}
                   </div>
-                  <v-progress-linear
-                      :value="value"
-                      background-color="#ececec"
-                      color="primary"
+                  <v-progress-linear v-if="calories>goal"
+                                     :value="goal/calories*100"
+                                     background-color="error"
+                                     color="primary"
                   ></v-progress-linear>
-                </v-col>
-              </v-row>
-              <v-row no-gutters class="pb-1">
-                <v-col>
-                  <div class="text-h6 card-light-grey font-weight-regular">
-                    Your Goal
-                  </div>
-                  <v-progress-linear
-                      :value="value2"
-                      background-color="#ececec"
-                      color="warning"
+                  <v-progress-linear v-if="calories<=goal"
+                                     :value="calories/goal*100"
+                                     background-color="#ececec"
+                                     color="primary"
                   ></v-progress-linear>
                 </v-col>
               </v-row>
@@ -116,7 +134,7 @@
         <v-col cols="12" md="6">
           <v-card class="mx-1 mb-1">
             <v-card-title class="pa-6 pb-3">
-              <p>Apex Heatmap Chart</p>
+              <p>Today's Macronutrients:</p>
               <v-spacer></v-spacer>
               <v-menu>
                 <template v-slot:activator="{ on, attrs }">
@@ -143,10 +161,10 @@
               <v-row no-gutters>
                 <v-col>
                   <ApexChart
-                    type="donut"
-                    :height=396
-                    :options="apexPie.options"
-                    :series="apexPie.series"
+                      type="donut"
+                      :height=396
+                      :options="apexPie.options"
+                      :series="apexPie.series"
                   ></ApexChart>
                 </v-col>
               </v-row>
@@ -229,6 +247,7 @@
 import mock from "./mock";
 import config from "@/config";
 import ApexChart from 'vue-apexcharts'
+import axios from "axios";
 
 
 export default {
@@ -238,12 +257,19 @@ export default {
     ApexChart,
   },
   data() {
+    let date = new Date()
     return {
       mock,
       apexLoading: false,
-      value: this.getRandomInt(10, 90),
+      date: date.toISOString().slice(0, 10),
+      calories: 0,
+      goal: 2000,
+      carbs: 0,
+      fats: 0,
+      proteins: 0,
       value2: this.getRandomInt(10, 90),
-      mainApexAreaSelect: "Weekly", apexArea: {
+      mainApexAreaSelect: "Weekly",
+      apexArea: {
         options: {
           chart: {
             toolbar: {
@@ -257,18 +283,12 @@ export default {
           xaxis: {
             type: "datetime",
             categories: [
-              "2020-09-18T00:00:00",
-              "2020-09-19T01:30:00",
-              "2020-09-20T02:30:00",
-              "2020-09-21T03:30:00",
-              "2020-09-22T04:30:00",
-              "2020-09-23T05:30:00",
 
             ],
           },
           tooltip: {
             x: {
-              format: "dd/MM/yy HH:mm",
+              format: "dd/MM/yy",
             },
           },
           legend: {
@@ -286,12 +306,8 @@ export default {
         },
         series: [
           {
-            name: "series1",
-            data: [31, 40, 28, 51, 42, 109, 100],
-          },
-          {
-            name: "series2",
-            data: [11, 32, 45, 32, 34, 52, 41],
+            name: "weight",
+            data: [],
           },
         ],
       },
@@ -300,14 +316,14 @@ export default {
           dataLabels: {
             enabled: false
           },
-          colors: [config.light.error,config.light.warning, config.light.success],
+          colors: [config.light.error, config.light.warning, config.light.success],
           labels: ["Proteins", "Total Fats", "Carbohydrates"],
           legend: {
             position: 'bottom',
             horizontalAlign: 'center',
           }
         },
-        series: this.generatePieSeries(),
+        series: [0, 0, 0],
       },
       apexLines: {
         options: {
@@ -412,24 +428,50 @@ export default {
       }
       return arr;
     },
-    generatePieSeries() {
-      let series = [];
-
-      for (let i = 0; i < 3; i++) {
-        let y = Math.floor(Math.random() * (500 - 100 + 100)) + 100;
-        series.push(y);
-      }
-      return series;
-    },
     getRandomInt(min, max) {
       let rand = min - 0.5 + Math.random() * (max - min + 1);
       return Math.round(rand);
     },
+    getTimeSeriesData() {
+      axios
+          .get('http://127.0.0.1:8000/api/v1/profile-info-per-day/', {params: {date__lte: this.date, weight__gt: 0}})
+          .then(response => {
+            console.log(response)
+            this.apexArea.series[0].data = []
+            let categories = []
+            for (let entry of response.data) {
+              this.apexArea.series[0].data.push(entry.weight)
+              categories.push(entry.date)
+
+            }
+            this.apexArea.options = {xaxis: {categories}}
+          })
+          .catch(error => {
+            console.log(error)
+          })
+    },
+    getData() {
+      this.getTimeSeriesData()
+      axios
+          .get('http://127.0.0.1:8000/api/v1/profile-info-per-day/', {params: {date: this.date}})
+          .then(response => {
+            console.log(response)
+            this.calories = response.data[0].calories
+            this.proteins = response.data[0].proteins
+            this.fats = response.data[0].fats
+            this.carbs = response.data[0].carbs
+            this.apexPie.series = [this.carbs, this.proteins, this.fats];
+          })
+          .catch(error => {
+            console.log(error)
+          })
+    }
   },
   mounted() {
     setTimeout(() => {
       this.apexLoading = true;
     });
+    this.getData();
   },
 };
 </script>

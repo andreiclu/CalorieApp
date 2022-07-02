@@ -29,6 +29,8 @@ class Profile(models.Model):
     age = models.IntegerField(null=True, blank=True)
     gender = models.CharField(max_length=6, choices=(('male', 'Male'), ('female', 'Female')), null=True, blank=True)
     lifestyle = models.CharField(max_length=100, choices=_LIFESTYLE_CHOICES, null=True, blank=True)
+    goal_weight = models.FloatField(null=True, blank=True, default=0)
+    calorie_goal = models.FloatField(null=True, blank=True, default=0)
 
 
 class ProfileInfoPerDay(models.Model):

@@ -41,22 +41,6 @@
             <v-card-title class="pa-6 pb-3">
               <p>Your Performance</p>
               <v-spacer></v-spacer>
-              <v-menu>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn icon v-bind="attrs" v-on="on">
-                    <v-icon color="textColor">mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-item
-                      v-for="(item, i) in mock.menu"
-                      :key="i"
-                      @click="() => {}"
-                  >
-                    <v-list-item-title>{{ item }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
             </v-card-title>
             <v-card-text class="pa-6 pt-0">
               <v-row no-gutters class="pb-5">
@@ -71,15 +55,15 @@
               <v-row no-gutters class="pb-3">
                 <v-col>
                   <div class="text-h6 card-light-grey font-weight-regular">
-                    Today Calories {{ calories }}/{{ goal }}
+                    Today Calories {{ calories }}/{{ calorieGoal }}
                   </div>
-                  <v-progress-linear v-if="calories>goal"
-                                     :value="goal/calories*100"
+                  <v-progress-linear v-if="calories>calorieGoal"
+                                     :value="calorieGoal/calories*100"
                                      background-color="error"
                                      color="primary"
                   ></v-progress-linear>
-                  <v-progress-linear v-if="calories<=goal"
-                                     :value="calories/goal*100"
+                  <v-progress-linear v-if="calories<=calorieGoal"
+                                     :value="calories/calorieGoal*100"
                                      background-color="#ececec"
                                      color="primary"
                   ></v-progress-linear>
@@ -96,26 +80,9 @@
             <v-card-title class="pa-6 pb-3">
               <p>Apex Line Chart</p>
               <v-spacer></v-spacer>
-              <v-menu>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                      icon
-                      v-bind="attrs"
-                      v-on="on"
-                  >
-                    <v-icon color="textColor">mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-item
-                      v-for="(item, i) in menu"
-                      :key="i"
-                      @click="() => {}"
-                  >
-                    <v-list-item-title>{{ item }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
+              <InputMenuWeight @saved="getTimeSeriesData">
+
+              </InputMenuWeight>
             </v-card-title>
             <v-card-text class="pa-6 pt-0">
               <v-row no-gutters>
@@ -134,28 +101,8 @@
         <v-col cols="12" md="6">
           <v-card class="mx-1 mb-1">
             <v-card-title class="pa-6 pb-3">
-              <p>Today's Macronutrients:</p>
+              <p style="padding: 5px">Today's Macronutrients:</p>
               <v-spacer></v-spacer>
-              <v-menu>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                      icon
-                      v-bind="attrs"
-                      v-on="on"
-                  >
-                    <v-icon color="textColor">mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-item
-                      v-for="(item, i) in menu"
-                      :key="i"
-                      @click="() => {}"
-                  >
-                    <v-list-item-title>{{ item }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
             </v-card-title>
             <v-card-text class="pa-6 pt-0">
               <v-row no-gutters>
@@ -172,71 +119,61 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-row no-gutters>
-        <v-col cols="12">
-          <v-card class="support-requests mx-1 mb-1">
-            <v-card-title class="pa-6 pb-0">
-              <p>Your Past Meals</p>
-              <v-spacer></v-spacer>
-              <v-menu>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn icon v-bind="attrs" v-on="on">
-                    <v-icon color="textColor">mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-item
-                      v-for="(item, i) in mock.menu"
-                      :key="i"
-                      @click="() => {}"
-                  >
-                    <v-list-item-title>{{ item }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-card-title>
-            <v-card-text class="pa-0">
-              <v-simple-table>
-                <template v-slot:default>
-                  <thead class="pl-2">
-                  <tr>
-                    <th class="text-left pa-6">MEAL NAME</th>
-                    <th class="text-left">TOTAL CALORIES</th>
-                    <th class="text-left">TOTAL PROTEINS</th>
-                    <th class="text-left">TOTAL FATS</th>
-                    <th class="text-left">TOTAL CARBS</th>
-                    <th class="text-left">STATUS</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr v-for="item in mock.table" :key="item.name">
-                    <td class="pa-6">{{ item.name }}</td>
-                    <td>{{ item.product }}</td>
-                    <td>{{ item.price }}</td>
-                    <td>{{ item.date }}</td>
-                    <td>{{ item.city }}</td>
-                    <td v-if="item.status === 'Sent'">
-                      <v-chip link color="success" class="ma-2 ml-0">
-                        Sent
-                      </v-chip>
-                    </td>
-                    <td v-else-if="item.status === 'Pending'">
-                      <v-chip link color="warning" class="ma-2 ml-0">
-                        Pending
-                      </v-chip>
-                    </td>
-                    <td v-else-if="item.status === 'Declined'">
-                      <v-chip link color="secondary" class="ma-2 ml-0">
-                        Declined
-                      </v-chip>
-                    </td>
-                  </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
-            </v-card-text>
-          </v-card>
+      <v-row no-gutters
+
+      >
+        <v-col cols="12" md="3">
+
+          <FactCard
+              title="BMI"
+              :value="bmi"
+              description="You're fat"
+
+          >
+
+          </FactCard>
         </v-col>
+        <v-col cols="12" md="3">
+
+
+          <FactCard
+              :value="toWeightGoal"
+              :description="toWeightGoalDescription"
+              unit="kg"
+          >
+            <v-card-title>
+              <InputMenuWeightGoal :title="toWeightGoalTitle" @saved="getTimeSeriesData">
+
+              </InputMenuWeightGoal>
+            </v-card-title>
+          </FactCard>
+        </v-col>
+        <v-col cols="12" md="3">
+
+          <FactCard
+              title="Total weight change"
+              :value="totalWeightChange"
+              description="From start till now"
+              unit="kg"
+
+          >
+          </FactCard>
+        </v-col>
+        <v-col cols="12" md="3">
+
+
+          <FactCard
+              title="Recent weight loss"
+              :value="recentWeightLoss"
+              description="=last 2 entries"
+              unit="kg"
+
+          >
+
+          </FactCard>
+        </v-col>
+
+
       </v-row>
     </div>
 
@@ -248,11 +185,16 @@ import mock from "./mock";
 import config from "@/config";
 import ApexChart from 'vue-apexcharts'
 import axios from "axios";
-
+import FactCard from "@/components/FactCard/FactCard";
+import InputMenuWeight from "@/components/InputMenu/InputMenuWeight";
+import InputMenuWeightGoal from "@/components/InputMenu/InputMenuWeightGoal";
 
 export default {
   name: "Dashboard",
   components: {
+    InputMenuWeightGoal,
+    InputMenuWeight,
+    FactCard,
     // Trend,
     ApexChart,
   },
@@ -263,11 +205,10 @@ export default {
       apexLoading: false,
       date: date.toISOString().slice(0, 10),
       calories: 0,
-      goal: 2000,
+      calorieGoal: 2000,
       carbs: 0,
       fats: 0,
       proteins: 0,
-      value2: this.getRandomInt(10, 90),
       mainApexAreaSelect: "Weekly",
       apexArea: {
         options: {
@@ -282,9 +223,7 @@ export default {
           },
           xaxis: {
             type: "datetime",
-            categories: [
-
-            ],
+            categories: [],
           },
           tooltip: {
             x: {
@@ -325,99 +264,14 @@ export default {
         },
         series: [0, 0, 0],
       },
-      apexLines: {
-        options: {
-          chart: {
-            type: 'line',
-            zoom: {
-              enabled: false
-            },
-            toolbar: {
-              show: false,
-            }
-          },
-          colors: [config.light.primary],
-          dataLabels: {
-            enabled: false
-          },
-          stroke: {
-            width: 2,
-            curve: 'smooth',
-            dashArray: [0, 8, 5]
-          },
-          markers: {
-            size: 0,
-            hover: {
-              sizeOffset: 6
-            }
-          },
-          xaxis: {
-            categories: ['01 Jan', '02 Jan', '03 Jan', '04 Jan', '05 Jan', '06 Jan', '07 Jan', '08 Jan', '09 Jan',
-              '10 Jan', '11 Jan', '12 Jan'
-            ],
-          },
-          tooltip: {
-            y: [
-              {
-                title: {
-                  formatter: function (val) {
-                    return val + " (mins)"
-                  }
-                }
-              },
-              {
-                title: {
-                  formatter: function (val) {
-                    return val + " per session"
-                  }
-                }
-              },
-              {
-                title: {
-                  formatter: function (val) {
-                    return val;
-                  }
-                }
-              }
-            ]
-          },
-          legend: {
-            show: false,
-          },
-          grid: {
-            xaxis: {
-              lines: {
-                show: false,
-              }
-            },
-            yaxis: {
-              lines: {
-                show: false,
-              },
-            }
-          }
-        },
-        series: [
-          {
-            name: "Session Duration",
-            data: [45, 52, 38, 24, 33, 26, 21, 20, 6, 8, 15, 10]
-          },
-          {
-            name: "Page Views",
-            data: [35, 41, 62, 42, 13, 18, 29, 37, 36, 51, 32, 35]
-          },
-          {
-            name: 'Total Visits',
-            data: [87, 57, 74, 99, 75, 38, 62, 47, 82, 56, 45, 47]
-          }
-        ],
-      },
-      menu: [
-        'Edit',
-        'Copy',
-        'Delete',
-        'Print'
-      ],
+      bmi: 0,
+      toWeightGoal: 0,
+      weightGoal: 0,
+      toWeightGoalDescription: '!',
+      totalWeightChange: +20,
+      recentWeightLoss: -2,
+      toWeightGoalTitle: ""
+
     };
   },
   methods: {
@@ -436,7 +290,6 @@ export default {
       axios
           .get('http://127.0.0.1:8000/api/v1/profile-info-per-day/', {params: {date__lte: this.date, weight__gt: 0}})
           .then(response => {
-            console.log(response)
             this.apexArea.series[0].data = []
             let categories = []
             for (let entry of response.data) {
@@ -450,12 +303,25 @@ export default {
             console.log(error)
           })
     },
-    getData() {
-      this.getTimeSeriesData()
+    getProfileData() {
+       axios
+          .get('http://127.0.0.1:8000/api/v1/profiles/', {params: {date: this.date}})
+          .then(response => {
+            console.log(response)
+            this.weightGoal = response.data.goal_weight || 0
+            this.toWeightGoalTitle = response.data.weight> response.data.goal_weight ? "Lose" : "Gain"
+            this.toWeightGoal = Math.abs(response.data.weight - response.data.goal_weight)
+            this.toWeightGoalDescription = 'to weight goal of ' + this.weightGoal + ' kg'
+            this.calorieGoal = response.data.calorie_goal || 0
+          })
+          .catch(error => {
+            console.log(error)
+          })
+    },
+    getDayData() {
       axios
           .get('http://127.0.0.1:8000/api/v1/profile-info-per-day/', {params: {date: this.date}})
           .then(response => {
-            console.log(response)
             this.calories = response.data[0].calories
             this.proteins = response.data[0].proteins
             this.fats = response.data[0].fats
@@ -465,6 +331,11 @@ export default {
           .catch(error => {
             console.log(error)
           })
+    },
+    getData() {
+      this.getTimeSeriesData()
+      this.getProfileData()
+      this.getDayData()
     }
   },
   mounted() {

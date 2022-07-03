@@ -110,10 +110,6 @@ import axios from "axios";
 export default {
   props: {
     title: String,
-    weightGoalDefault: Number,
-    calorieGoalDefault: Number,
-    heightDefault: Number,
-    ageDefault: Number,
   },
   data() {
     let date = new Date()
@@ -134,7 +130,7 @@ export default {
           })
           .then(response => {
             console.log(response)
-            this.meals = response.data
+            this.$emit('saved');
           })
           .catch(error => {
             console.log(error)

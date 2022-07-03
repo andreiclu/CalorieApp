@@ -31,6 +31,9 @@
             <v-card-title class="pa-5 pb-3">
               <p>Meal List:</p>
               <v-spacer></v-spacer>
+              <AddFoodToMeal :meal-id="displayedMeal.id" title="Add food" @saved="getMeals"
+              >
+              </AddFoodToMeal>
             </v-card-title>
             <v-simple-table>
               <template v-slot:default>
@@ -106,11 +109,12 @@
 import mock from './mock'
 import axios from "axios";
 import NewMeal from "@/components/InputMenu/NewMeal";
-
+import AddFoodToMeal from "@/components/InputMenu/AddFoodToMeal";
 export default {
   name: 'Tables',
   components: {
-    NewMeal
+    NewMeal,
+    AddFoodToMeal
 
   },
   data() {
@@ -131,7 +135,8 @@ export default {
       addFoodId: 0,
       currentDialogItem: null,
       showFoodsPerMeal: false,
-      displayedFoods: []
+      displayedFoods: [],
+      displayedMeal: {}
     }
   },
   methods: {
@@ -142,6 +147,7 @@ export default {
           .get('api/v1/foods-per-meal/', {params: {meal: meal.id}})
           .then(response => {
             this.displayedFoods = response.data
+            this.displayedMeal = meal
             console.log(this.displayedFoods)
           })
           .catch(error => {

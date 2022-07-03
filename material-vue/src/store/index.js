@@ -2,7 +2,9 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 Vue.use(Vuex);
-
+Vue.use(MdButton)
+Vue.use(MdContent)
+Vue.use(MdTabs)
 export default new Vuex.Store({
 
     namespace: true,

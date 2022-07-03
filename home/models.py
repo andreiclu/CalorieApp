@@ -63,6 +63,10 @@ class Meal(models.Model):
     date = models.DateField()
     time = models.TimeField()
     title = models.CharField(max_length=128, default="")
+    calories = models.FloatField(default=0)
+    carbs = models.FloatField(default=0)
+    proteins = models.FloatField(default=0)
+    fats = models.FloatField(default=0)
 
 
 class FoodPerMeal(models.Model):

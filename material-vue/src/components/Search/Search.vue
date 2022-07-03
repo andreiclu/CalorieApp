@@ -28,7 +28,7 @@ export default {
     async filteredList() {
 
       const b = await axios
-          .get('http://127.0.0.1:8000/api/v1/foods/', {params: {search: this.input}})
+          .get('api/v1/foods/', {params: {search: this.input}})
           .then(response => {
             return response.data
           })

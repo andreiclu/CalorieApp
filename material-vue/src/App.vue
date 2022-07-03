@@ -14,7 +14,7 @@ export default {
     this.$store.commit("initializeStore")
 
     const access = this.$store.state.access
-
+    axios.defaults.baseURL = 'http://127.0.0.1:8000';
     if ( access ) {
       axios.defaults.headers.common['Authorization'] = 'JWT ' + access
     } else {

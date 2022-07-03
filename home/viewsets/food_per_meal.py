@@ -34,8 +34,15 @@ class FoodPerMealViewSet(viewsets.ModelViewSet):
         profile_info_per_day.proteins += number * food.protein
         profile_info_per_day.fats += number * food.total_fats
         profile_info_per_day.carbs += number * food.carbohydrate
-
         profile_info_per_day.save()
+
+        meal = serializer.validated_data['meal']
+        meal.calories += number * food.calories
+        meal.proteins += number * food.protein
+        meal.fats += number * food.total_fats
+        meal.carbs += number * food.carbohydrate
+        meal.save()
+
 
     def get_queryset(self):
         return self.queryset.filter(meal__user=self.request.user)

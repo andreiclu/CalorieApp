@@ -118,7 +118,7 @@ export default {
   methods: {
     save() {
       axios
-          .post('http://127.0.0.1:8000/api/v1/profiles/', {
+          .post('api/v1/profiles/', {
             goal_weight: this.goalWeight,
             calorie_goal: this.goalCalories,
             height: this.height,

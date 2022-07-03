@@ -23,7 +23,7 @@
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
                   v-model="date"
-                  label="Select a date for other stats: "
+                  label="Date: "
                   prepend-icon="mdi-calendar"
                   readonly
                   v-bind="attrs"
@@ -306,7 +306,7 @@ export default {
   methods: {
     getTimeSeriesData() {
       axios
-          .get('http://127.0.0.1:8000/api/v1/profile-info-per-day/', {params: {date__lte: this.date, weight__gt: 0}})
+          .get('api/v1/profile-info-per-day/', {params: {date__lte: this.date, weight__gt: 0}})
           .then(response => {
             let categories = []
             let weights = []
@@ -326,7 +326,7 @@ export default {
               this.totalWeightChange = weights[0] - weights.at(-1)
             }
             if (weights.length > 0) {
-              this.bmi = Number((weights[0] / Math.pow((heights[0] || this.height || 180 / 100), 2)).toFixed(1))
+              this.bmi = Number((weights[0] / Math.pow(((heights[0] || this.height || 180) / 100), 2)).toFixed(1))
             }
 
 
@@ -337,7 +337,7 @@ export default {
     },
     getProfileData() {
       axios
-          .get('http://127.0.0.1:8000/api/v1/profiles/', {params: {date: this.date}})
+          .get('api/v1/profiles/', {params: {date: this.date}})
           .then(response => {
             this.weightGoal = response.data.goal_weight || 0
             this.toWeightGoal = response.data.weight - response.data.goal_weight
@@ -351,7 +351,7 @@ export default {
     },
     getDayData() {
       axios
-          .get('http://127.0.0.1:8000/api/v1/profile-info-per-day/', {params: {date: this.date}})
+          .get('api/v1/profile-info-per-day/', {params: {date: this.date}})
           .then(response => {
             this.calories = response.data[0].calories
             this.proteins = response.data[0].proteins

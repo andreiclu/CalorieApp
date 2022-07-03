@@ -1,5 +1,5 @@
 <template>
-  <v-footer class="px-0 mt-10" color="transparent">
+  <v-footer class="px-0 mt-4" color="transparent">
     <v-row no-gutters>
       <div>
         <v-btn

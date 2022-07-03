@@ -106,30 +106,12 @@ import {mapActions, mapState} from 'vuex'
         items: [
           { title: 'Dashboard', icon: 'mdi-home', link: '/dashboard' },
           { title: 'Foods/Meals', icon: 'mdi-food', link: '/tables' },
-          { title: 'Notifications', icon: 'mdi-bell-outline', link: '/notifications' },
-          {
-            title: 'UI Elements',
-            icon: 'mdi-image-filter-none',
-            link: '/icons',
-            model: false,
-            children: [
-              { title: 'Icons', icon: 'mdi-circle-small', link: '/icons'},
-              { title: 'Charts', icon: 'mdi-circle-small', link: '/charts'},
-              { title: 'Maps', icon: 'mdi-circle-small', link: '/maps'},
-            ],
-          },
           { divider: true },
           { heading: 'CALCULATORS' },
           { title: 'Daily Calorie', icon: 'mdi-basket', link: '/dailycalorieintake'},
           { title: 'BMI', icon: 'mdi-bike', link: '/bmi'},
           { title: 'Ideal Body Weight', icon: 'mdi-scale-balance', link:'/IBW'},
           { title: 'Calories Burned', icon: 'mdi-fire', link:'/CBC'},
-          { divider: true },
-          { heading: 'MEALS' },
-          { title: 'MealName1', icon: 'mdi-check', color: 'warning'},
-          { title: 'MealName2', icon: 'mdi-check', color: 'primary'},
-          { title: 'MealName3', icon: 'mdi-check', color: 'error'}
-
         ],
         sidebarWidth: 240,
         sidebarMinWidth: 96

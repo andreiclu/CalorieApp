@@ -7,10 +7,6 @@ import Layout from '@/components/Layout/Layout';
 import Dashboard from '@/pages/Dashboard/Dashboard';
 import Typography from '@/pages/Typography/Typography'
 import Tables from '@/pages/Tables/Basic'
-import Notifications from '@/pages/Notifications/Notifications'
-import Icons from '@/pages/Icons/Icons'
-import Charts from '@/pages/Charts/Charts'
-import Maps from '@/pages/Maps/Google'
 import Error from "@/pages/Error/Error";
 import Login from "@/pages/Login/Login";
 import DailyCalorieIntake from "@/pages/DailyCalorieIntake/DailyCalorieIntake";
@@ -53,26 +49,6 @@ export default new Router({
         path: 'tables',
         name: 'Tables',
         component: Tables
-      },
-      {
-        path: 'notifications',
-        name: 'Notifications',
-        component: Notifications
-      },
-      {
-        path: 'icons',
-        name: 'Icons',
-        component: Icons
-      },
-      {
-        path: 'charts',
-        name: 'Charts',
-        component: Charts
-      },
-      {
-        path: 'maps',
-        name: 'Maps',
-        component: Maps
       },
       {
         path: 'dailycalorieintake',

@@ -9,9 +9,12 @@ export default {
                 sortable: true,
                 value: 'name',
             },
-            { text: 'Company', value: 'company' },
-            { text: 'City', value: 'city' },
-            { text: 'State', value: 'state' },
+            { text: 'Serving Size', value: 'company' },
+            { text: 'Calories', value: 'company' },
+            { text: 'Proteins', value: 'city' },
+            { text: 'Carbohydrates', value: 'state' },
+            { text: 'Total Fats', value: 'state' },
+            { text: 'Add to meal', value: 'state' },
         ],
         employee: [
             {

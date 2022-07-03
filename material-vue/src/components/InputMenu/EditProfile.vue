@@ -30,6 +30,9 @@
                 prepend-icon="mdi-scale"
                 v-model="goalWeight"
                 label="Weight Goal"
+                filled
+                rounded
+                dense
             ></v-text-field>
 
           </v-list-item>
@@ -38,6 +41,9 @@
                 prepend-icon="mdi-alpha-k-box-outline"
                 v-model="goalCalories"
                 label="Calorie Goal"
+                filled
+                rounded
+                dense
             ></v-text-field>
 
           </v-list-item>
@@ -46,6 +52,9 @@
                 prepend-icon="mdi-human-male-height"
                 v-model="height"
                 label="Height"
+                filled
+                rounded
+                dense
             ></v-text-field>
 
 
@@ -55,6 +64,9 @@
                 prepend-icon="mdi-timer-sand"
                 v-model="age"
                 label="Age"
+                filled
+                rounded
+                dense
             ></v-text-field>
 
 

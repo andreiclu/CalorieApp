@@ -30,7 +30,7 @@
         <v-col cols=12>
           <v-card class="mb-1">
             <v-card-title class="pa-5 pb-3">
-              <p>Material-UI Table</p>
+              <p>Meal List:</p>
               <v-spacer></v-spacer>
               <v-menu>
                 <template v-slot:activator="{ on, attrs }">
@@ -56,11 +56,11 @@
                   <thead>
                   <tr>
                     <th class="text-left pa-6">NAME</th>
-                    <th class="text-left">EMAIL</th>
-                    <th class="text-left">PRODUCT</th>
-                    <th class="text-left">PRICE</th>
-                    <th class="text-left">DATE</th>
-                    <th class="text-left">CITY</th>
+                    <th class="text-left">CONTAINING FOODS</th>
+                    <th class="text-left">TOTAL NUMBER OF CALORIES</th>
+                    <th class="text-left">TOTAL NUMBER OF PROTEINS</th>
+                    <th class="text-left">TOTAL NUMBER OF CARBS</th>
+                    <th class="text-left">TOTAL NUMBER OF FATS</th>
                     <th class="text-left">STATUS</th>
                   </tr>
                   </thead>

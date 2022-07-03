@@ -15,7 +15,6 @@
     </v-btn>
     <v-toolbar-title>Calorie Counter by Clu</v-toolbar-title>
     <v-spacer></v-spacer>
-    <Search/>
 
     <v-menu
         min-width="180"
@@ -70,16 +69,13 @@
 <script>
 import {mapActions, mapState} from 'vuex'
 import config from '../../config';
-import Search from "@/components/Search/Search";
 
 export default {
   name: 'Header',
-  components: {Search},
   data: () => ({
     config,
-    // searchCollapse: true,
     account: [
-      {text: 'Profile ', icon: 'mdi-account', color: 'textColor'},
+      {text: 'Profile ', icon: 'mdi-account', color: 'textColor', link:"/dashboard"},
     ],
     notificationsBadge: true,
     messageBadge: true

@@ -24,7 +24,7 @@ class ProfileInfoPerDayViewSet(viewsets.ModelViewSet):
             ProfileInfoPerDay.objects.get_or_create(profile=profile, date=request.query_params.get('date', now()))
             queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data[:7])
+        return Response(serializer.data)
 
     def filter_queryset(self, queryset):
         queryset = super().filter_queryset(queryset)
@@ -32,20 +32,24 @@ class ProfileInfoPerDayViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         profile = Profile.objects.get(user=self.request.user)
-        request.data['profile'] = profile.id
-        existing = ProfileInfoPerDay.objects.filter(date=request.data["date"], profile=profile).first()
+        data = request.data.dict()
+        data['profile'] = profile.id
+        existing = ProfileInfoPerDay.objects.filter(date=data["date"], profile=profile).first()
         if existing:
             serializer = ProfileInfoPerDaySerializer(existing)
         else:
-            serializer = self.get_serializer(data=request.data)
+            serializer = self.get_serializer(data=data)
             serializer.is_valid(raise_exception=True)
         if existing:
-            existing.weight = request.data['weight']
+            serializer = self.get_serializer(existing, data=data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
             existing.save()
         else:
             serializer.save()
         latest = ProfileInfoPerDay.objects.all().order_by('-date').first()
         profile.weight = latest.weight
+        profile.height = latest.height
         profile.save()
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

@@ -6,21 +6,16 @@
         :nudge-width="100"
         offset-x
     >
-
-      <v-btn
-          color="indigo"
-          dark
-          v-bind="attrs"
-          v-on="on"
-      >
-        <v-tooltip top>
-          <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark v-on="on">Top</v-btn>
-          </template>
-          <span>Top tooltip</span>
-        </v-tooltip>
-      </v-btn>
-
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+            color="indigo"
+            dark
+            v-bind="attrs"
+            v-on="on"
+        >
+          Add weight
+        </v-btn>
+      </template>
 
       <v-card>
 
@@ -88,7 +83,7 @@ export default {
     return {
       weight: 0,
       menu: false,
-      date: date.toISOString().slice(0, 10),
+      date: date.toISOString().slice(0, 10)
     }
   },
   methods: {

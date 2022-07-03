@@ -41,6 +41,13 @@
             <v-card-title class="pa-6 pb-3">
               <p>Your Performance</p>
               <v-spacer></v-spacer>
+              <EditProfile title="Edit profile" @saved="getData"
+                           :calorie-goal-default="calorieGoal"
+                           :weight-goal-default="weightGoal"
+                           :height-default="height"
+                           :age-default="age"
+              >
+              </EditProfile>
             </v-card-title>
             <v-card-text class="pa-6 pt-0">
               <v-row no-gutters class="pb-5">
@@ -61,6 +68,7 @@
                                      :value="calorieGoal/calories*100"
                                      background-color="error"
                                      color="primary"
+                                     :label="calorieGoal/calories*100"
                   ></v-progress-linear>
                   <v-progress-linear v-if="calories<=calorieGoal"
                                      :value="calories/calorieGoal*100"
@@ -78,9 +86,9 @@
         <v-col cols="12" md="6">
           <v-card class="mx-1 mb-1">
             <v-card-title class="pa-6 pb-3">
-              <p>Apex Line Chart</p>
+              <p>Weight stats: </p>
               <v-spacer></v-spacer>
-              <InputMenuWeight @saved="getTimeSeriesData">
+              <InputMenuWeight @saved="getData">
 
               </InputMenuWeight>
             </v-card-title>
@@ -127,33 +135,29 @@
           <FactCard
               title="BMI"
               :value="bmi"
-              description="You're fat"
+              :description="bmiDescription"
 
           >
-
           </FactCard>
+
         </v-col>
         <v-col cols="12" md="3">
 
 
           <FactCard
-              :value="toWeightGoal"
+              :title="toWeightGoal>0 ? 'Lose' : 'Gain'"
+              :value="Math.abs(toWeightGoal)"
               :description="toWeightGoalDescription"
               unit="kg"
           >
-            <v-card-title>
-              <InputMenuWeightGoal :title="toWeightGoalTitle" @saved="getTimeSeriesData">
-
-              </InputMenuWeightGoal>
-            </v-card-title>
           </FactCard>
         </v-col>
         <v-col cols="12" md="3">
 
           <FactCard
-              title="Total weight change"
-              :value="totalWeightChange"
-              description="From start till now"
+              :title="totalWeightChange>0 ? 'Gained' : 'Lost'"
+              :value="Math.abs(totalWeightChange)"
+              :description="totalWeightChangeDescription"
               unit="kg"
 
           >
@@ -163,9 +167,9 @@
 
 
           <FactCard
-              title="Recent weight loss"
-              :value="recentWeightLoss"
-              description="=last 2 entries"
+              :title="recentWeightLoss>0 ? 'Gained' : 'Lost'"
+              :value="Math.abs(recentWeightLoss)"
+              description="in last 2 entries"
               unit="kg"
 
           >
@@ -187,25 +191,26 @@ import ApexChart from 'vue-apexcharts'
 import axios from "axios";
 import FactCard from "@/components/FactCard/FactCard";
 import InputMenuWeight from "@/components/InputMenu/InputMenuWeight";
-import InputMenuWeightGoal from "@/components/InputMenu/InputMenuWeightGoal";
+import EditProfile from "@/components/InputMenu/EditProfile";
 
 export default {
   name: "Dashboard",
   components: {
-    InputMenuWeightGoal,
     InputMenuWeight,
     FactCard,
-    // Trend,
     ApexChart,
+    EditProfile
+
   },
   data() {
     let date = new Date()
     return {
       mock,
+      age: 20,
       apexLoading: false,
       date: date.toISOString().slice(0, 10),
       calories: 0,
-      calorieGoal: 2000,
+      calorieGoal: 0,
       carbs: 0,
       fats: 0,
       proteins: 0,
@@ -248,6 +253,10 @@ export default {
             name: "weight",
             data: [],
           },
+          {
+            name: "BMI",
+            data: []
+          }
         ],
       },
       apexPie: {
@@ -267,52 +276,74 @@ export default {
       bmi: 0,
       toWeightGoal: 0,
       weightGoal: 0,
-      toWeightGoalDescription: '!',
-      totalWeightChange: +20,
-      recentWeightLoss: -2,
-      toWeightGoalTitle: ""
+      totalWeightChange: 0,
+      recentWeightLoss: 0,
+      height: 180
 
     };
   },
-  methods: {
-    getRandomDataForTrends() {
-      const arr = [];
-      for (let i = 0; i < 12; i += 1) {
-        arr.push(Math.random().toFixed(1) * 10);
+  computed: {
+    totalWeightChangeDescription() {
+      return `From start until ${this.date}`
+    },
+    toWeightGoalDescription() {
+      return `to weight goal of ${this.weightGoal} kg`
+    },
+    bmiDescription() {
+      if (this.bmi < 18.5) {
+        return "Underweight 😒"
+      } else if (this.bmi >= 18.5 && this.bmi <= 24.9) {
+        return "Normal Weight 😍"
+      } else if (this.bmi >= 25 && this.bmi <= 29.9) {
+        return "Overweight 😮"
+      } else {
+        return "Obese 😱"
       }
-      return arr;
+
     },
-    getRandomInt(min, max) {
-      let rand = min - 0.5 + Math.random() * (max - min + 1);
-      return Math.round(rand);
-    },
+
+  },
+  methods: {
     getTimeSeriesData() {
       axios
           .get('http://127.0.0.1:8000/api/v1/profile-info-per-day/', {params: {date__lte: this.date, weight__gt: 0}})
           .then(response => {
-            this.apexArea.series[0].data = []
             let categories = []
+            let weights = []
+            let heights = []
+            let bmis = []
             for (let entry of response.data) {
-              this.apexArea.series[0].data.push(entry.weight)
+              weights.push(entry.weight)
+              heights.push(entry.height)
               categories.push(entry.date)
-
+              bmis.push(Number((entry.weight / Math.pow(((entry.height || this.height || 180) / 100), 2)).toFixed(1)))
             }
+            this.apexArea.series[0].data = weights
+            this.apexArea.series[1].data = bmis
             this.apexArea.options = {xaxis: {categories}}
+            if (weights.length >= 2) {
+              this.recentWeightLoss = weights[0] - weights[1]
+              this.totalWeightChange = weights[0] - weights.at(-1)
+            }
+            if (weights.length > 0) {
+              this.bmi = Number((weights[0] / Math.pow((heights[0] || this.height || 180 / 100), 2)).toFixed(1))
+            }
+
+
           })
           .catch(error => {
             console.log(error)
           })
     },
     getProfileData() {
-       axios
+      axios
           .get('http://127.0.0.1:8000/api/v1/profiles/', {params: {date: this.date}})
           .then(response => {
-            console.log(response)
             this.weightGoal = response.data.goal_weight || 0
-            this.toWeightGoalTitle = response.data.weight> response.data.goal_weight ? "Lose" : "Gain"
-            this.toWeightGoal = Math.abs(response.data.weight - response.data.goal_weight)
-            this.toWeightGoalDescription = 'to weight goal of ' + this.weightGoal + ' kg'
+            this.toWeightGoal = response.data.weight - response.data.goal_weight
             this.calorieGoal = response.data.calorie_goal || 0
+            this.height = response.data.height
+            this.age = response.data.age
           })
           .catch(error => {
             console.log(error)

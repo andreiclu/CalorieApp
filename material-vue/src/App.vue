@@ -42,7 +42,7 @@ export default {
         refresh: this.$store.state.refresh
       }
       axios
-          .post('/auth/jwt/refresh/', accessData)
+          .post('http://127.0.0.1:8000/auth/jwt/refresh/', accessData)
           .then(response => {
             const access = response.data.access
 

@@ -4,7 +4,7 @@
             v-model="menu"
             :close-on-content-click="false"
             :nudge-width="100"
-            offset-x
+
 
 
     >

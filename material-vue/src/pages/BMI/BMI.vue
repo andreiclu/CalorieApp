@@ -26,3 +26,4 @@ export default {
 </script>
 
 <style src="./BMI.scss" scoped lang="scss"></style>
+

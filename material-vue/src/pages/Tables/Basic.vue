@@ -29,9 +29,9 @@
         <v-col cols=12>
           <v-card class="mb-1">
             <v-card-title class="pa-5 pb-3">
-              <p>Meal List:</p>
+              <p>Food List:</p>
               <v-spacer></v-spacer>
-              <AddFoodToMeal :meal-id="displayedMeal.id" title="Add food" @saved="getMeals"
+              <AddFoodToMeal :meal-id="displayedMeal.id" title="Add food" @saved="getMealsAndFoods"
               >
               </AddFoodToMeal>
             </v-card-title>
@@ -51,10 +51,10 @@
                 <tr v-for="food in displayedFoods" v-bind:key="food.id">
                   <td class="pa-6">{{ food.food.name }}</td>
                   <td>{{ food.number }}</td>
-                  <td>{{ food.food.calories }}</td>
-                  <td>{{ food.food.protein }}</td>
-                  <td>{{ food.food.carbohydrate }}</td>
-                  <td>{{ food.food.total_fats }}</td>
+                  <td>{{ (food.food.calories * food.number).toFixed(1) }}</td>
+                  <td>{{ (food.food.protein * food.number).toFixed(1) }}</td>
+                  <td>{{ (food.food.carbohydrate * food.number).toFixed(1) }}</td>
+                  <td>{{ (food.food.total_fats * food.number).toFixed(1) }}</td>
                 </tr>
                 </tbody>
               </template>
@@ -84,16 +84,19 @@
                   <th class="text-left">PROTEINS</th>
                   <th class="text-left">CARBS</th>
                   <th class="text-left">FATS</th>
+                  <th class="text-left">DELETE</th>
+
                 </tr>
                 </thead>
                 <tbody>
                 <tr @click="showDialog(meal)" v-for="meal in meals" v-bind:key="meal.id">
                   <td class="pa-6">{{ meal.title }}</td>
                   <td class="pa-6">{{ meal.time }}</td>
-                  <td>{{ meal.calories }}</td>
-                  <td>{{ meal.proteins }}</td>
-                  <td>{{ meal.carbs }}</td>
-                  <td>{{ meal.fats }}</td>
+                  <td>{{ meal.calories.toFixed(1) }}</td>
+                  <td>{{ meal.proteins.toFixed(1) }}</td>
+                  <td>{{ meal.carbs.toFixed(1) }}</td>
+                  <td>{{ meal.fats.toFixed(1) }}</td>
+                  <td></td>
                 </tr>
                 </tbody>
               </template>
@@ -142,17 +145,22 @@ export default {
   methods: {
     showDialog(meal) {
       this.showFoodsPerMeal = true;
-      this.currentDialogItem = meal;
+      this.displayedMeal = meal
+      this.getFoods()
+    },
+    getFoods(){
       axios
-          .get('api/v1/foods-per-meal/', {params: {meal: meal.id}})
+          .get('api/v1/foods-per-meal/', {params: {meal: this.displayedMeal.id}})
           .then(response => {
             this.displayedFoods = response.data
-            this.displayedMeal = meal
-            console.log(this.displayedFoods)
           })
           .catch(error => {
             console.log(error)
           })
+    },
+    getMealsAndFoods(){
+      this.getMeals()
+      this.getFoods()
     },
     getMeals() {
       axios
@@ -171,39 +179,11 @@ export default {
             meal: this.addToMealId, food: this.addFoodId
           })
           .then(response => {
-            console.log(response)
             this.meals = response.data
           })
           .catch(error => {
             console.log(error)
           })
-    },
-    openAddFoodForm(mealId) {
-      this.openedAddFoodForm = !this.openedAddFoodForm
-      this.addToMealId = mealId
-    },
-    addMeal() {
-      axios
-          .post('api/v1/meals/', {date: this.date, time: this.newMealTime, title: this.newMealTitle})
-          .then(response => {
-            this.meals = response.data
-          })
-          .catch(error => {
-            console.log(error)
-          })
-    },
-    async filteredList() {
-      const b = await axios
-          .get('api/v1/foods/', {params: {search: this.searchInput}})
-          .then(response => {
-            return response.data
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      this.updateKey++;
-      this.foods.splice(0, this.foods.length)
-      this.foods.push(...b)
     },
   }
   ,

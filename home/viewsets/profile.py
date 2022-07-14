@@ -1,4 +1,5 @@
-from rest_framework import routers, serializers, viewsets
+
+from rest_framework import viewsets
 from rest_framework.response import Response
 
 from home.models import Profile
@@ -27,3 +28,4 @@ class ProfileViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+

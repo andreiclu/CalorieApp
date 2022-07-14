@@ -38,12 +38,55 @@
 
           </v-list-item>
           <v-list-item>
-            <md-autocomplete v-model="value" :md-options="countries" @md-changed="getCountries"
-                             @md-opened="getCountries">
-              <label>Country</label>
-
-              <template slot="md-autocomplete-item" slot-scope="{ item }">{{ item.name }}</template>
-            </md-autocomplete>
+            <v-card>
+              <v-card-text>
+                <v-autocomplete
+                    v-model="food"
+                    :items="items"
+                    :loading="isLoading"
+                    :search-input.sync="search"
+                    color="white"
+                    hide-no-data
+                    hide-selected
+                    item-text="name"
+                    item-value="API"
+                    label="Search"
+                    placeholder="Start typing to Search"
+                    prepend-icon="mdi-database-search"
+                    return-object
+                ></v-autocomplete>
+              </v-card-text>
+              <v-divider></v-divider>
+              <v-expand-transition>
+                <v-list
+                    v-if="food"
+                    class="lighten-3"
+                >
+                  <v-list-item
+                      v-for="(field, i) in fields"
+                      :key="i"
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title v-text="field.value"></v-list-item-title>
+                      <v-list-item-subtitle v-text="field.key"></v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-expand-transition>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    :disabled="!food"
+                    color="primary"
+                    @click="food = null"
+                >
+                  Clear
+                  <v-icon right>
+                    mdi-close-circle
+                  </v-icon>
+                </v-btn>
+              </v-card-actions>
+            </v-card>
           </v-list-item>
         </v-list>
 
@@ -81,73 +124,74 @@ export default {
     return {
       menu: false,
       amount: 0,
-      value: null,
-      countryList: [
-        {
-          id: 1,
-          name: 'Algeria'
-        },
-        {
-          id: 2,
-          name: 'Argentina'
-        },
-        {
-          id: 3,
-          name: 'Brazil'
-        },
-        {
-          id: 4,
-          name: 'Canada'
-        },
-        {
-          id: 5,
-          name: 'Italy'
-        },
-        {
-          id: 6,
-          name: 'Japan'
-        },
-        {
-          id: 7,
-          name: 'United Kingdom'
-        },
-        {
-          id: 8,
-          name: 'United States'
-        }
-      ],
-      countries: []
+      descriptionLimit: 60,
+      entries: [],
+      isLoading: false,
+      food: null,
+      search: null,
     }
   },
   methods: {
     save() {
+      console.log(this.food)
       axios
           .post('api/v1/foods-per-meal/', {
-            number: 1,
+            number: this.amount,
             meal: this.mealId,
-            food: 1
+            food: this.food.id
           })
           .then(response => {
             console.log(response)
-            this.meals = response.data
+            this.menu = false
+            this.$emit('saved')
           })
           .catch(error => {
             console.log(error)
           })
-    },
-    getCountries(searchTerm) {
-      this.countries = new Promise(resolve => {
-        window.setTimeout(() => {
-          if (!searchTerm) {
-            resolve(this.countryList)
-          } else {
-            const term = searchTerm.toLowerCase()
+    }
+  },
+  computed: {
+    fields() {
+      if (!this.food) return []
 
-            resolve(this.countryList.filter(({name}) => name.toLowerCase().includes(term)))
-          }
-        }, 500)
+      return Object.keys(this.food).filter(key => {
+        return !["id", "category", "name", "serving_size", "calories", "carbohydrate", "protein", "total_fats"].includes(key);
+
+      }).map(key => {
+
+        return {
+          key,
+          value: this.food[key] || 'n/a',
+        }
       })
     },
-  }
+    items() {
+      return this.entries.map(entry => {
+        return Object.assign({}, entry, {
+          Name: entry.name, "Serving Size": entry.serving_size,
+          Calories: entry.calories, Carbs: entry.carbohydrate, Proteins: entry.protein, Fats: entry.total_fats
+        })
+      })
+    },
+  },
+  watch: {
+    search(val) {
+      if (this.isLoading) return
+
+      this.isLoading = true
+
+      // Lazily load input items
+      axios
+          .get('api/v1/foods/', {params: {search: val}})
+          .then(response => {
+            this.count = response.data.results.length
+            this.entries = response.data.results
+          })
+          .catch(err => {
+            console.log(err)
+          })
+          .finally(() => (this.isLoading = false))
+    },
+  },
 }
 </script>

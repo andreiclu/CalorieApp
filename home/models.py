@@ -11,7 +11,6 @@ class Food(models.Model):
     total_fats = models.FloatField(default=0)
     carbohydrate = models.FloatField(default=0)
     protein = models.FloatField(default=0)
-    category = models.CharField(max_length=20)
 
     def __str__(self):
         return f'{self.name}'

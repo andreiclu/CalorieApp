@@ -1,7 +1,8 @@
 <template>
   <form action="#">
     <label :data-state="state">
-      <input type="text" v-on:input="filteredList" placeholder="Search" v-model ='input' @click="state = 'open'" @blur="state='close'"/>
+      <input type="text" v-on:input="filteredList" placeholder="Search"
+             v-model ='input' @click="state = 'open'" @blur="state='close'"/>
       <div class="item fruit" v-for="food in foods" v-bind:key="food.id">
         <p>{{ food.name }}</p>
       </div>
@@ -28,7 +29,8 @@ export default {
     async filteredList() {
 
       const b = await axios
-          .get('api/v1/foods/', {params: {search: this.input}})
+          .get('api/v1/foods/',
+              {params: {search: this.input}})
           .then(response => {
             return response.data
           })

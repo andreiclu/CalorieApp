@@ -357,7 +357,8 @@ export default {
             this.proteins = response.data[0].proteins
             this.fats = response.data[0].fats
             this.carbs = response.data[0].carbs
-            this.apexPie.series = [this.carbs, this.proteins, this.fats];
+            this.apexPie.series = [Number(this.carbs.toFixed(1)),
+              Number(this.proteins.toFixed(1)), Number(this.fats.toFixed(1))];
           })
           .catch(error => {
             console.log(error)
